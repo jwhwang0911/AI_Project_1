@@ -5,23 +5,23 @@ class TextStructure {
       color: Colors.black,
       fontSize: 20,
       fontWeight: FontWeight.w600,
-      fontFamily: 'Poppins');
+      fontFamily: 'PoppinsRegular');
 
   static TextStyle title = const TextStyle(
       color: Colors.black,
       fontSize: 24,
-      fontWeight: FontWeight.w600,
-      fontFamily: 'Poppins');
+      fontWeight: FontWeight.bold,
+      fontFamily: 'PoppinsSemiBold');
 
   static TextStyle bookTitle = const TextStyle(
       color: Colors.black,
       fontSize: 16,
       fontWeight: FontWeight.w600,
-      fontFamily: "Poppins");
+      fontFamily: "PoppinsRegular");
 
   static TextStyle bookAuthor = const TextStyle(
-      color: Colors.black,
+      color: Color.fromARGB(255, 110, 110, 110),
       fontSize: 12,
       fontWeight: FontWeight.w500,
-      fontFamily: "Poppins");
+      fontFamily: "PoppinsRegular");
 }

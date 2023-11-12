@@ -2,7 +2,7 @@ import 'package:boosic/Book/book_main.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-void main() async {
+void main() {
   runApp(const MyApp());
 }
 
