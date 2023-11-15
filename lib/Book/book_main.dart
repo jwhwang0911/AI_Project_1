@@ -11,18 +11,20 @@ class MainBook extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: const EdgeInsets.fromLTRB(30, 80, 0, 63),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Header1(),
-            const SizedBox(height: 40),
-            Text("Popular Books", style: TextStructure.title),
-            const SizedBox(height: 20),
-            const PopularBook(),
-            Text("Newest", style: TextStructure.title),
-            const NewBooks(),
-          ],
+        padding: const EdgeInsets.fromLTRB(20, 80, 20, 63),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Header1(),
+              const SizedBox(height: 40),
+              Text("Popular Books", style: TextStructure.title),
+              const SizedBox(height: 20),
+              const PopularBook(),
+              Text("Newest", style: TextStructure.title),
+              const NewBooks(),
+            ],
+          ),
         ),
       ),
     );

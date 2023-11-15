@@ -24,4 +24,16 @@ class TextStructure {
       fontSize: 12,
       fontWeight: FontWeight.w500,
       fontFamily: "PoppinsRegular");
+
+  static TextStyle volumeTitle = const TextStyle(
+      color: Colors.black,
+      fontSize: 24,
+      fontWeight: FontWeight.w600,
+      fontFamily: "PoppinsRegular");
+
+  static TextStyle volumeAuthor = const TextStyle(
+      color: Color.fromARGB(255, 110, 110, 110),
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      fontFamily: "PoppinsRegular");
 }

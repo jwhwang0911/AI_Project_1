@@ -1,4 +1,5 @@
 import 'package:boosic/Book/book_main.dart';
+import 'package:boosic/Book/volumes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,9 +13,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const GetMaterialApp(
+    print(MediaQuery.of(context).size.width);
+
+    return GetMaterialApp(
       title: 'Boosic',
-      home: MainBook(),
+      initialRoute: '/',
+      getPages: [
+        GetPage(name: '/', page: () => const MainBook()),
+        GetPage(name: '/volumes', page: () => const Volumes())
+      ],
     );
   }
 }

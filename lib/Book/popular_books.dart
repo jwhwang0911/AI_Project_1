@@ -2,6 +2,7 @@ import 'package:boosic/Service/book_service.dart';
 import 'package:boosic/models/book_model.dart';
 import 'package:boosic/utils/text_style.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class PopularBook extends StatefulWidget {
   const PopularBook({super.key});
@@ -22,13 +23,16 @@ class _PopularBookState extends State<PopularBook> {
         if (snapshot.data != null) {
           List<BookModel> popularBook = snapshot.data!;
 
-          return Expanded(
+          return SizedBox(
+            height: 270,
             child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (((context, index) {
                   return GestureDetector(
                     onTap: () {
-                      print("${popularBook[index].title}");
+                      Get.toNamed('/volumes', arguments: {
+                        "volumeInfo": popularBook[index],
+                      });
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
