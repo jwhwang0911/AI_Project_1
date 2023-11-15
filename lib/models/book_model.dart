@@ -9,6 +9,13 @@ class BookModel {
   bool has_image_link = false;
   final String description;
 
+  BookModel()
+      : id = "",
+        author = ["장원"],
+        title = "teassedf",
+        language = "en",
+        description = "옛날옛날";
+
   BookModel.fromJson(Map<String, dynamic>? json)
       : id = json!["id"],
         author = json["volumeInfo"]["authors"] ?? [],

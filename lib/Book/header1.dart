@@ -1,3 +1,4 @@
+import 'package:boosic/utils/search.dart';
 import 'package:boosic/utils/text_style.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,9 @@ class _Header1State extends State<Header1> {
             ],
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showSearch(context: context, delegate: Search());
+            },
             icon: const Icon(
               Icons.search,
               size: 30,

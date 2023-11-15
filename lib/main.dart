@@ -1,4 +1,5 @@
 import 'package:boosic/Book/book_main.dart';
+import 'package:boosic/Book/query.dart';
 import 'package:boosic/Book/volumes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,11 +17,12 @@ class MyApp extends StatelessWidget {
     print(MediaQuery.of(context).size.width);
 
     return GetMaterialApp(
-      title: 'Boosic',
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       getPages: [
-        GetPage(name: '/', page: () => const MainBook()),
-        GetPage(name: '/volumes', page: () => const Volumes())
+        GetPage(name: '/', page: () => MainBook()),
+        GetPage(name: '/volumes', page: () => const Volumes()),
+        GetPage(name: '/query', page: () => const Query()),
       ],
     );
   }

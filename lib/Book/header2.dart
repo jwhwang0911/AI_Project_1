@@ -25,7 +25,7 @@ class _Header2State extends State<Header2> {
         children: [
           IconButton(
             onPressed: () {
-              Get.back();
+              Get.toNamed("/");
             },
             icon: const Icon(
               Icons.arrow_back_ios_rounded,
