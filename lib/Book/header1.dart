@@ -15,41 +15,57 @@ class _Header1State extends State<Header1> {
     // return const Placeholder(
     //   fallbackHeight: 90,
     // );
-    return Container(
-      constraints: const BoxConstraints(
-        maxHeight: 100,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(
-            children: [
-              Image.asset(
-                'assets/images/logo.png',
-                height: 50,
-                width: 50,
-              ),
-              const SizedBox(
-                width: 23,
-              ),
-              Text(
-                "Hi, Dustin",
-                style: TextStructure.header,
-              ),
-            ],
-          ),
-          IconButton(
-            onPressed: () {
-              showSearch(context: context, delegate: Search());
-            },
-            icon: const Icon(
-              Icons.search,
-              size: 30,
+    return AppBar(
+      automaticallyImplyLeading: false,
+      toolbarHeight: 80,
+      backgroundColor: Colors.white,
+      shadowColor: Colors.transparent,
+      title: Container(
+        constraints: const BoxConstraints(
+          maxHeight: 100,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Image.asset(
+                  'assets/images/logo.png',
+                  height: 50,
+                  width: 50,
+                ),
+                const SizedBox(
+                  width: 23,
+                ),
+                Text(
+                  "Hi, Dustin",
+                  style: TextStructure.header,
+                ),
+              ],
             ),
-          )
-        ],
+          ],
+        ),
       ),
+      actions: [
+        Row(
+          children: [
+            IconButton(
+              onPressed: () {
+                showSearch(context: context, delegate: Search());
+              },
+              icon: const Icon(
+                Icons.search,
+                size: 30,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+          ],
+        )
+      ],
     );
   }
 }

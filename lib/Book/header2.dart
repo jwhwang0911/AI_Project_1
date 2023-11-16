@@ -1,4 +1,3 @@
-import 'package:boosic/utils/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

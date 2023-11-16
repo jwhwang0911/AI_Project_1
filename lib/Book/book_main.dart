@@ -1,84 +1,87 @@
-import 'package:boosic/Book/new_books.dart';
-import 'package:boosic/Book/popular_books.dart';
+import 'package:boosic/Book/header1.dart';
+import 'package:boosic/Book/home_screen.dart';
+import 'package:boosic/Book/query.dart';
+import 'package:boosic/Get/PageIndexController.dart';
 import 'package:boosic/Get/SearchController.dart';
-import 'package:boosic/utils/search.dart';
-import 'package:boosic/utils/text_style.dart';
+import 'package:boosic/Music/music.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MainBook extends StatefulWidget {
-  MainBook({super.key});
+  const MainBook({super.key});
 
   @override
   State<MainBook> createState() => _MainBookState();
 }
 
 class _MainBookState extends State<MainBook> {
+  final List<Widget> _pages = [
+    const HomeScreen(),
+    const Query(),
+    const MusicScreen(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     Get.put(SearchListController());
+    Get.put(PageIndexController());
 
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 80,
-        backgroundColor: Colors.white,
-        shadowColor: Colors.transparent,
-        title: Container(
-          constraints: const BoxConstraints(
-            maxHeight: 100,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/images/logo.png',
-                    height: 50,
-                    width: 50,
-                  ),
-                  const SizedBox(
-                    width: 23,
-                  ),
-                  Text(
-                    "Hi, Dustin",
-                    style: TextStructure.header,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              showSearch(context: context, delegate: Search());
-            },
-            icon: const Icon(
-              Icons.search,
-              size: 30,
-              color: Colors.black,
-            ),
-          )
-        ],
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(80), child: Header1()),
+      body: GetBuilder<PageIndexController>(
+        builder: (controller) {
+          return _pages[controller.selectedIndex];
+        },
       ),
-      body: Container(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 63),
-        color: Colors.white,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              Text("Popular Books", style: TextStructure.title),
-              const SizedBox(height: 20),
-              const PopularBook(),
-              Text("Newest", style: TextStructure.title),
-              const NewBooks(),
-            ],
-          ),
-        ),
+      bottomNavigationBar: Transform.translate(
+        offset: const Offset(0, -5),
+        child: BottomAppBar(
+            shadowColor: Colors.transparent,
+            shape: const CircularNotchedRectangle(),
+            child: GetBuilder<PageIndexController>(builder: (controller) {
+              return Container(
+                margin: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 238, 237, 237),
+                  border: Border.all(color: Colors.white),
+                  borderRadius:
+                      const BorderRadius.all(Radius.circular(8.0) // POINT
+                          ),
+                ),
+                height: 60,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    IconButton(
+                      icon: const Icon(Icons.home),
+                      onPressed: () {
+                        controller.set_zero();
+                      },
+                    ),
+                    const SizedBox(
+                      width: 70,
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.favorite),
+                      onPressed: () {
+                        controller.set_one();
+                      },
+                    ),
+                    const SizedBox(
+                      width: 70,
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.person),
+                      onPressed: () {
+                        controller.set_two();
+                      },
+                    ),
+                  ],
+                ),
+              );
+            })),
       ),
     );
   }

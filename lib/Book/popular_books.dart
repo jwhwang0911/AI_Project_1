@@ -15,7 +15,7 @@ class _PopularBookState extends State<PopularBook> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: BookService.loard_of_the_Rings(),
+      future: BookService.query_google_api("반지의 제왕"),
       builder: ((context, snapshot) {
         double imageHeight = 192;
         double imageWidth = 131;
@@ -76,10 +76,12 @@ class _PopularBookState extends State<PopularBook> {
                         const SizedBox(
                           height: 5,
                         ),
-                        Text(
-                          popularBook[index].author.first,
-                          style: TextStructure.bookAuthor,
-                        )
+                        popularBook[index].author.isEmpty
+                            ? Container()
+                            : Text(
+                                popularBook[index].author.first,
+                                style: TextStructure.bookAuthor,
+                              )
                       ],
                     ),
                   );

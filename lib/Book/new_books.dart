@@ -17,7 +17,7 @@ class _NewBooksState extends State<NewBooks> {
     double width = MediaQuery.of(context).size.width;
 
     return FutureBuilder(
-      future: BookService.harrypotter(),
+      future: BookService.query_google_api("해리 포터"),
       builder: ((context, snapshot) {
         double imageHeight = 110;
         double imageWidth = 90;
@@ -89,47 +89,53 @@ class _NewBooksState extends State<NewBooks> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              SizedBox(
-                                width: width - 210,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      newbooks[index].author.first,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    width: width - 210,
+                                    height: 20,
+                                    child: Text(
+                                      newbooks[index].author.isEmpty
+                                          ? Container()
+                                          : newbooks[index].author.first,
                                       style: TextStructure.bookAuthor,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                    Transform.translate(
-                                      offset: const Offset(0, 30),
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          color: const Color.fromARGB(
-                                              255, 235, 235, 235),
-                                          border:
-                                              Border.all(color: Colors.white),
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(8.0) // POINT
-                                              ),
-                                        ),
-                                        width: 30,
-                                        child: Text(
-                                          newbooks[index].language,
-                                          style: TextStructure.bookAuthor,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         ],
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.bookmark_outline),
-                      onPressed: () {},
+                    Column(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.bookmark_outline),
+                          onPressed: () {},
+                        ),
+                        Transform.translate(
+                          offset: const Offset(-5, 15),
+                          child: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 235, 235, 235),
+                              border: Border.all(color: Colors.white),
+                              borderRadius: const BorderRadius.all(
+                                  Radius.circular(8.0) // POINT
+                                  ),
+                            ),
+                            width: 30,
+                            child: Text(
+                              newbooks[index].language,
+                              style: TextStructure.bookAuthor,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ],
                 );

@@ -1,5 +1,5 @@
+import 'package:boosic/Get/PageIndexController.dart';
 import 'package:boosic/Get/SearchController.dart';
-import 'package:boosic/models/book_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,30 +21,37 @@ class Search extends SearchDelegate {
     return IconButton(
       icon: const Icon(Icons.arrow_back),
       onPressed: () {
-        Navigator.pop(context);
+        Get.back();
       },
     );
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    return GetBuilder<SearchListController>(
-      builder: (controller) {
-        controller.add(query);
-        Future.delayed(Duration(milliseconds: 5), () {
-          Get.toNamed("/query");
-        });
+    return GetBuilder<PageIndexController>(builder: (cont) {
+      return GetBuilder<SearchListController>(
+        builder: (controller) {
+          controller.add(query);
+          Future.delayed(const Duration(milliseconds: 5), () {
+            cont.set_one();
 
-        return Container();
-      },
-    );
+            Get.toNamed(
+              "/",
+            );
+          });
+
+          return Container();
+        },
+      );
+    });
   }
 
-  late BookModel temp;
-
-  Search() {
-    temp = BookModel();
-  }
+  Search()
+      : super(
+          searchFieldLabel: "검색어를 입력해주세요",
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.search,
+        );
 
   @override
   Widget buildSuggestions(BuildContext context) {

@@ -20,9 +20,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       getPages: [
-        GetPage(name: '/', page: () => MainBook()),
+        GetPage(name: '/', page: () => const MainBook()),
         GetPage(name: '/volumes', page: () => const Volumes()),
-        GetPage(name: '/query', page: () => const Query()),
       ],
     );
   }
