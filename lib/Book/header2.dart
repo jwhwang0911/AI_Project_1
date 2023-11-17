@@ -14,21 +14,23 @@ class _Header2State extends State<Header2> {
     // return const Placeholder(
     //   fallbackHeight: 90,
     // );
-    return Container(
-      constraints: const BoxConstraints(
-        maxHeight: 100,
-      ),
-      child: Row(
+    return AppBar(
+      automaticallyImplyLeading: false,
+      toolbarHeight: 80,
+      backgroundColor: Colors.white,
+      shadowColor: Colors.transparent,
+      title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           IconButton(
             onPressed: () {
-              Get.toNamed("/");
+              Get.back();
             },
             icon: const Icon(
               Icons.arrow_back_ios_rounded,
               size: 24,
+              color: Colors.black,
             ),
           ),
           Row(
@@ -38,6 +40,7 @@ class _Header2State extends State<Header2> {
                 icon: const Icon(
                   Icons.bookmark_border_rounded,
                   size: 26,
+                  color: Colors.black,
                 ),
               ),
               IconButton(
@@ -45,6 +48,7 @@ class _Header2State extends State<Header2> {
                 icon: const Icon(
                   Icons.more_vert,
                   size: 26,
+                  color: Colors.black,
                 ),
               )
             ],

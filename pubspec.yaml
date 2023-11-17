@@ -39,6 +39,7 @@ dependencies:
   dio: ^5.3.3
   desktop_window: ^0.4.0
   flutter_floating_bottom_bar: ^1.2.0
+  image_picker: ^1.0.4
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +67,7 @@ flutter:
   assets:
     - assets/images/logo.png
     - assets/images/logo_black.png
+    - assets/images/Skeleton.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -94,6 +96,9 @@ flutter:
     - family: PoppinsSemiBold
       fonts:
         - asset: fonts/Poppins-SemiBold.ttf
+    - family: ReadMIcons
+      fonts:
+        - asset: fonts/ReadMIcons.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

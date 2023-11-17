@@ -4,6 +4,7 @@ import 'package:boosic/Book/query.dart';
 import 'package:boosic/Get/PageIndexController.dart';
 import 'package:boosic/Get/SearchController.dart';
 import 'package:boosic/Music/music.dart';
+import 'package:boosic/utils/read_m_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -43,7 +44,6 @@ class _MainBookState extends State<MainBook> {
                 controller.setQeuryCalled();
               }
             });
-
             return PageView(
               controller: pageController,
               onPageChanged: controller.setPageIndex,
@@ -84,7 +84,7 @@ class _MainBookState extends State<MainBook> {
                       label: "Search",
                     ),
                     BottomNavigationBarItem(
-                      icon: Icon(Icons.library_music),
+                      icon: Icon(ReadMIcons.music),
                       label: "Music",
                     ),
                   ],
