@@ -4,7 +4,7 @@ class TextStructure {
   static TextStyle header = const TextStyle(
       color: Colors.black,
       fontSize: 20,
-      fontWeight: FontWeight.w600,
+      fontWeight: FontWeight.bold,
       fontFamily: 'PoppinsRegular');
 
   static TextStyle title = const TextStyle(

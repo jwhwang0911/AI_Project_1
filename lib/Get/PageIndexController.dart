@@ -5,18 +5,15 @@ class PageIndexController extends GetxController {
 
   int selectedIndex = 0;
 
-  void set_zero() {
-    selectedIndex = 0;
+  bool query_called = false;
+
+  void setPageIndex(int index) {
+    selectedIndex = index;
     update();
   }
 
-  void set_one() {
-    selectedIndex = 1;
-    update();
-  }
-
-  void set_two() {
-    selectedIndex = 2;
+  void setQeuryCalled() {
+    query_called = !query_called;
     update();
   }
 }

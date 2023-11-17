@@ -21,68 +21,77 @@ class _MainBookState extends State<MainBook> {
     const MusicScreen(),
   ];
 
+  PageController pageController = PageController();
+
+  void _onItemTapped(int index) {
+    pageController.jumpToPage(index);
+  }
+
   @override
   Widget build(BuildContext context) {
     Get.put(SearchListController());
     Get.put(PageIndexController());
 
     return Scaffold(
-      appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(80), child: Header1()),
-      body: GetBuilder<PageIndexController>(
-        builder: (controller) {
-          return _pages[controller.selectedIndex];
-        },
-      ),
-      bottomNavigationBar: Transform.translate(
-        offset: const Offset(0, -5),
-        child: BottomAppBar(
-            shadowColor: Colors.transparent,
-            shape: const CircularNotchedRectangle(),
-            child: GetBuilder<PageIndexController>(builder: (controller) {
-              return Container(
-                margin: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 238, 237, 237),
-                  border: Border.all(color: Colors.white),
-                  borderRadius:
-                      const BorderRadius.all(Radius.circular(8.0) // POINT
-                          ),
-                ),
-                height: 60,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    IconButton(
-                      icon: const Icon(Icons.home),
-                      onPressed: () {
-                        controller.set_zero();
-                      },
+        appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(80), child: Header1()),
+        body: GetBuilder<PageIndexController>(
+          builder: (controller) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (controller.query_called) {
+                _onItemTapped(controller.selectedIndex);
+                controller.setQeuryCalled();
+              }
+            });
+
+            return PageView(
+              controller: pageController,
+              onPageChanged: controller.setPageIndex,
+              children: _pages,
+            );
+            // return _pages[controller.selectedIndex];
+          },
+        ),
+        bottomNavigationBar: Transform.translate(
+          offset: const Offset(0, -20),
+          child:
+              GetBuilder<PageIndexController>(builder: (pageindexcontroller) {
+            return Container(
+              margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              height: 72,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: BottomNavigationBar(
+                  currentIndex: pageindexcontroller.selectedIndex,
+                  onTap: _onItemTapped,
+                  items: const <BottomNavigationBarItem>[
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home),
+                      label: "Home",
                     ),
-                    const SizedBox(
-                      width: 70,
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.search_rounded),
+                      label: "Search",
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.favorite),
-                      onPressed: () {
-                        controller.set_one();
-                      },
-                    ),
-                    const SizedBox(
-                      width: 70,
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.person),
-                      onPressed: () {
-                        controller.set_two();
-                      },
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.library_music),
+                      label: "Music",
                     ),
                   ],
                 ),
-              );
-            })),
-      ),
-    );
+              ),
+            );
+          }),
+        ));
   }
 }

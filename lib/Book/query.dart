@@ -1,8 +1,6 @@
-import 'package:boosic/Book/header1.dart';
 import 'package:boosic/Get/SearchController.dart';
 import 'package:boosic/Service/book_service.dart';
 import 'package:boosic/models/book_model.dart';
-import 'package:boosic/utils/search.dart';
 import 'package:boosic/utils/text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,7 +12,10 @@ class Query extends StatefulWidget {
   State<Query> createState() => _QueryState();
 }
 
-class _QueryState extends State<Query> {
+class _QueryState extends State<Query> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -28,10 +29,8 @@ class _QueryState extends State<Query> {
           children: [
             GetBuilder<SearchListController>(builder: (controller) {
               return FutureBuilder(
-                future: BookService.query_google_api(
-                    controller.recentList.isEmpty
-                        ? ""
-                        : controller.recentList.last),
+                future:
+                    BookService.query_google_api(controller.recentQuery.value),
                 builder: ((context, snapshot) {
                   double imageHeight = 110;
                   double imageWidth = 90;

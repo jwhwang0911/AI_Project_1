@@ -33,7 +33,8 @@ class Search extends SearchDelegate {
         builder: (controller) {
           controller.add(query);
           Future.delayed(const Duration(milliseconds: 5), () {
-            cont.set_one();
+            cont.setPageIndex(1);
+            cont.setQeuryCalled();
 
             Get.toNamed(
               "/",
@@ -72,6 +73,16 @@ class Search extends SearchDelegate {
                     .recentList[controller.recentList.length - 1 - index];
                 showResults(context);
               },
+              trailing: query.isEmpty
+                  ? IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        controller.recentList
+                            .removeAt(controller.recentList.length - 1 - index);
+                        controller.update();
+                      },
+                    )
+                  : const SizedBox(),
             );
           },
         );

@@ -1,5 +1,4 @@
 import 'package:boosic/Book/book_main.dart';
-import 'package:boosic/Book/query.dart';
 import 'package:boosic/Book/volumes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
