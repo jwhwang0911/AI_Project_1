@@ -78,9 +78,13 @@ class _PopularBookState extends State<PopularBook> {
                         ),
                         popularBook[index].author.isEmpty
                             ? Container()
-                            : Text(
-                                popularBook[index].author.first,
-                                style: TextStructure.bookAuthor,
+                            : SizedBox(
+                                width: imageWidth,
+                                child: Text(
+                                  popularBook[index].author.first,
+                                  style: TextStructure.bookAuthor,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               )
                       ],
                     ),
