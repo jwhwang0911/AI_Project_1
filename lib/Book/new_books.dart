@@ -1,4 +1,5 @@
 import 'package:boosic/Service/book_service.dart';
+import 'package:boosic/Service/review_service.dart';
 import 'package:boosic/models/book_model.dart';
 import 'package:boosic/utils/text_style.dart';
 import 'package:flutter/material.dart';
@@ -104,8 +105,20 @@ class _NewBooksState extends State<NewBooks> {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
+                                  FutureBuilder(future: ReviewService.star(newbooks[index].id), builder: (context, snapshot) {
+                                    if (snapshot.data != null) {
+                                      double star = snapshot.data!;
+                                      print("$star, 왜 안됨?");
+                                      return Text(
+                                        "$star, 왜 안됨?"
+                                      );
+                                    } else {
+                                      return Container();
+                                    }
+                                  }),
                                 ],
                               ),
+                              
                             ],
                           ),
                         ],

@@ -60,13 +60,14 @@ class _MainBookState extends State<MainBook> {
               margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               decoration: BoxDecoration(
                 boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    spreadRadius: 5,
-                    blurRadius: 7,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
+                      BoxShadow(
+                        color: const Color.fromARGB(255, 94, 94, 94)
+                            .withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 3,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
               ),
               height: 72,
               child: ClipRRect(

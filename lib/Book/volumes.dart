@@ -1,4 +1,5 @@
 import 'package:boosic/Book/header2.dart';
+import 'package:boosic/Service/review_service.dart';
 import 'package:boosic/models/book_model.dart';
 import 'package:boosic/utils/read_m_icons.dart';
 import 'package:boosic/utils/text_style.dart';
@@ -24,10 +25,10 @@ class _VolumesState extends State<Volumes> {
     super.initState();
   }
 
-  Future<void> sendImage(bool is_camera) async {
+  Future<void> sendImage(bool isCamera) async {
     Get.back();
     final img = await picker.pickImage(
-      source: is_camera ? ImageSource.camera : ImageSource.gallery,
+      source: isCamera ? ImageSource.camera : ImageSource.gallery,
       maxHeight: 75,
       maxWidth: 75,
       imageQuality: 30,
@@ -177,8 +178,6 @@ class _VolumesState extends State<Volumes> {
 
   @override
   Widget build(BuildContext context) {
-    ImagePicker picker = ImagePicker();
-
     BookModel elem = Get.arguments['volumeInfo'] as BookModel;
 
     double imageHeight = 284;
@@ -249,7 +248,7 @@ class _VolumesState extends State<Volumes> {
                                 style: TextStructure.volumeAuthor),
                           ],
                         )
-                      : elem.author.length != 0
+                      : elem.author.isNotEmpty
                           ? Text(elem.author.first,
                               style: TextStructure.volumeAuthor)
                           : Container(),
@@ -284,7 +283,7 @@ class _VolumesState extends State<Volumes> {
                     GestureDetector(
                       onTap: () {
                         Scrollable.ensureVisible(_widgetKey.currentContext!,
-                            duration: Duration(milliseconds: 300),
+                            duration: const Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
                             alignment: 0);
                       },
@@ -428,7 +427,12 @@ class _VolumesState extends State<Volumes> {
               ),
               const SizedBox(
                 height: 20,
-              )
+              ),
+              FutureBuilder(
+                  future: ReviewService.reviews(elem.id),
+                  builder: ((context, snapshot) {
+                    return Container();
+                  }))
             ],
           )
         ],
