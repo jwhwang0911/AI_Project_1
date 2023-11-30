@@ -23,7 +23,6 @@ class _MusicScreenState extends State<MusicScreen>
   void initState() {
     super.initState();
     _audioPlayer = AudioPlayer();
-    _audioPlayer.stop();
 
     // Set a sequence of audio sources that will be played by the audio player.
   }
