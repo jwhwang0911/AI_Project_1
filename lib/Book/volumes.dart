@@ -1,8 +1,11 @@
 import 'package:boosic/Book/header2.dart';
+import 'package:boosic/Book/new_books.dart';
 import 'package:boosic/Service/review_service.dart';
 import 'package:boosic/models/book_model.dart';
+import 'package:boosic/models/review_model.dart';
 import 'package:boosic/utils/read_m_icons.dart';
 import 'package:boosic/utils/text_style.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,6 +19,10 @@ class Volumes extends StatefulWidget {
 
 class _VolumesState extends State<Volumes> {
   final GlobalKey _widgetKey = GlobalKey();
+  final GlobalKey _widgetKey2 = GlobalKey();
+
+  FocusNode _focusNode = FocusNode();
+  bool _isKeyboardOpen = false;
 
   ImagePicker picker = ImagePicker();
   XFile? image;
@@ -23,7 +30,22 @@ class _VolumesState extends State<Volumes> {
   @override
   void initState() {
     super.initState();
+
+    _focusNode.addListener(() {
+      setState(() {
+        _isKeyboardOpen = _focusNode.hasFocus;
+      });
+    });
   }
+
+  @override
+  void dispose() {
+    // FocusNode 메모리 누수 방지를 위해 dispose에서 포커스 제거
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  final myController = TextEditingController();
 
   Future<void> sendImage(bool isCamera) async {
     Get.back();
@@ -191,83 +213,245 @@ class _VolumesState extends State<Volumes> {
       body: Stack(
         alignment: Alignment.topCenter,
         children: [
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+          GestureDetector(
+            onTap: () {
+              _focusNode.unfocus();
+            },
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  elem.has_image_link
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image.network(
-                            elem.image_link,
-                            scale: 0.65,
-                          ),
-                        )
-                      : Container(
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 238, 237, 237),
-                            border: Border.all(color: Colors.white),
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(8.0) // POINT
+              child: Container(
+                color: Colors.white,
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      elem.has_image_link
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: Image.network(
+                                elem.image_link,
+                                scale: 0.65,
+                              ),
+                            )
+                          : Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 238, 237, 237),
+                                border: Border.all(color: Colors.white),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0) // POINT
+                                    ),
+                              ),
+                              height: imageHeight,
+                              width: imageWidth,
+                              child: Image.asset(
+                                'assets/images/logo_black.png',
+                              )),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
+                        width: 300,
+                        child: Text(
+                          elem.title,
+                          style: TextStructure.volumeTitle,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      elem.author.length > 1
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "${elem.author.first}\n${elem.author[1]}",
+                                  style: TextStructure.volumeAuthor,
+                                  textAlign: TextAlign.center,
                                 ),
-                          ),
-                          height: imageHeight,
-                          width: imageWidth,
-                          child: Image.asset(
-                            'assets/images/logo_black.png',
-                          )),
-                  const SizedBox(
-                    height: 10,
+                                const SizedBox(width: 12),
+                              ],
+                            )
+                          : elem.author.isNotEmpty
+                              ? Text(elem.author.first,
+                                  style: TextStructure.volumeAuthor)
+                              : Container(),
+                      FutureBuilder(
+                        future: FirebaseFirestore.instance
+                            .collection("reviews")
+                            .doc(elem.id)
+                            .get()
+                            .then((DocumentSnapshot doc) {
+                          final data = doc.data() as Map<String, dynamic>;
+
+                          return data["star"];
+                        }),
+                        builder: (context, snapshot) {
+                          if (snapshot.data != null) {
+                            double temp = snapshot.data.toDouble();
+                            return StarRating(temp, false, 20);
+                          } else {
+                            return StarRating(0.0, false, 20);
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Container(
+                        key: _widgetKey,
+                        child: elem.description != ""
+                            ? Text(
+                                elem.description,
+                                style: TextStructure.volumeAuthor,
+                              )
+                            : Container(),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
+                        key: _widgetKey2,
+                        height: MediaQuery.of(context).size.height,
+                        child: FutureBuilder(
+                          future: FirebaseFirestore.instance
+                              .collection("reviews")
+                              .doc(elem.id)
+                              .get()
+                              .then((DocumentSnapshot doc) {
+                            final data = doc.data() as Map<String, dynamic>;
+
+                            return data;
+                          }),
+                          builder: (context, snapshot) {
+                            if (snapshot.data != null) {
+                              List<ReviewModel> review = [];
+
+                              for (var elem in snapshot.data!["reviews"]) {
+                                review.add(ReviewModel.fromJson(elem));
+                              }
+
+                              return Column(
+                                children: [
+                                  TextField(
+                                    focusNode: _focusNode,
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: 'Review 작성',
+                                    ),
+                                    controller: myController,
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      review.add(
+                                          ReviewModel(myController.text, 0));
+
+                                      List<Map<String, dynamic>> json = [];
+
+                                      double totalScore = 0.0;
+
+                                      for (ReviewModel js in review) {
+                                        json.add({
+                                          "element": js.element,
+                                          "star": js.star
+                                        });
+                                        totalScore = totalScore +
+                                            js.star / review.length;
+                                      }
+
+                                      await FirebaseFirestore.instance
+                                          .collection("reviews")
+                                          .doc(elem.id)
+                                          .set({
+                                        "reviews": json,
+                                        "star": totalScore
+                                      });
+                                    },
+                                    child: const Text("제출"),
+                                  ),
+                                  ListView.separated(
+                                    shrinkWrap: true,
+                                    physics: const ClampingScrollPhysics(),
+                                    padding: const EdgeInsets.only(top: 20),
+                                    scrollDirection: Axis.vertical,
+                                    itemBuilder: (context, index) {
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text("익명"),
+                                          StarRating(
+                                              review[index].star, false, 20),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Text(review[index].element),
+                                        ],
+                                      );
+                                    },
+                                    separatorBuilder: (context, index) {
+                                      return const Divider();
+                                    },
+                                    itemCount: review.length,
+                                  )
+                                ],
+                              );
+                            } else {
+                              List<ReviewModel> review = [];
+                              return Column(
+                                children: [
+                                  TextField(
+                                    focusNode: _focusNode,
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: 'Review 작성',
+                                    ),
+                                    controller: myController,
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      review.add(
+                                          ReviewModel(myController.text, 0));
+
+                                      List<Map<String, dynamic>> json = [];
+
+                                      double totalScore = 0.0;
+
+                                      for (ReviewModel js in review) {
+                                        json.add({
+                                          "element": js.element,
+                                          "star": js.star
+                                        });
+                                        totalScore = totalScore +
+                                            js.star / review.length;
+                                      }
+
+                                      await FirebaseFirestore.instance
+                                          .collection("reviews")
+                                          .doc(elem.id)
+                                          .set({
+                                        "reviews": json,
+                                        "star": totalScore
+                                      });
+                                    },
+                                    child: const Text("제출"),
+                                  ),
+                                ],
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 170,
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    width: 300,
-                    child: Text(
-                      elem.title,
-                      style: TextStructure.volumeTitle,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  elem.author.length > 1
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(elem.author.first,
-                                style: TextStructure.volumeAuthor),
-                            const SizedBox(width: 12),
-                            Text(elem.author[1],
-                                style: TextStructure.volumeAuthor),
-                          ],
-                        )
-                      : elem.author.isNotEmpty
-                          ? Text(elem.author.first,
-                              style: TextStructure.volumeAuthor)
-                          : Container(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    key: _widgetKey,
-                    child: elem.description != ""
-                        ? Text(
-                            elem.description,
-                            style: TextStructure.volumeAuthor,
-                          )
-                        : Container(),
-                  ),
-                  const SizedBox(
-                    height: 170,
-                  ),
-                ],
+                ),
               ),
             ),
           ),
@@ -330,7 +514,12 @@ class _VolumesState extends State<Volumes> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Scrollable.ensureVisible(_widgetKey2.currentContext!,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                            alignment: 0);
+                      },
                       child: Container(
                         width: 154,
                         height: 44,
@@ -381,7 +570,7 @@ class _VolumesState extends State<Volumes> {
               ),
               GestureDetector(
                 onTap: () {
-                  openSnackbar();
+                  _isKeyboardOpen ? null : openSnackbar();
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -428,11 +617,6 @@ class _VolumesState extends State<Volumes> {
               const SizedBox(
                 height: 20,
               ),
-              FutureBuilder(
-                  future: ReviewService.reviews(elem.id),
-                  builder: ((context, snapshot) {
-                    return Container();
-                  }))
             ],
           )
         ],

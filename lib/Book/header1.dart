@@ -39,7 +39,7 @@ class _Header1State extends State<Header1> {
                   width: 23,
                 ),
                 Text(
-                  "Hi, Dustin",
+                  "Hi, ReadM",
                   style: TextStructure.header,
                 ),
               ],

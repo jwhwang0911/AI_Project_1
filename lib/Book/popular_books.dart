@@ -15,7 +15,7 @@ class _PopularBookState extends State<PopularBook> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: BookService.query_google_api("반지의 제왕"),
+      future: BookService.query_google_api("해리 포터"),
       builder: ((context, snapshot) {
         double imageHeight = 192;
         double imageWidth = 131;

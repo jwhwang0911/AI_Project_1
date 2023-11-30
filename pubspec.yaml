@@ -41,7 +41,9 @@ dependencies:
   flutter_floating_bottom_bar: ^1.2.0
   image_picker: ^1.0.4
   firebase_core: ^2.22.0
-  cloud_firestore: ^4.13.1
+  cloud_firestore: ^4.13.2
+  flutter_rating_bar: ^4.0.1
+  just_audio: ^0.9.36
 
 dev_dependencies:
   flutter_test:

@@ -2,7 +2,9 @@ import 'package:boosic/Service/book_service.dart';
 import 'package:boosic/Service/review_service.dart';
 import 'package:boosic/models/book_model.dart';
 import 'package:boosic/utils/text_style.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
 class NewBooks extends StatefulWidget {
@@ -18,7 +20,7 @@ class _NewBooksState extends State<NewBooks> {
     double width = MediaQuery.of(context).size.width;
 
     return FutureBuilder(
-      future: BookService.query_google_api("해리 포터"),
+      future: BookService.query_google_api("반지의 제왕"),
       builder: ((context, snapshot) {
         double imageHeight = 110;
         double imageWidth = 90;
@@ -38,6 +40,7 @@ class _NewBooksState extends State<NewBooks> {
                   children: [
                     GestureDetector(
                       onTap: () {
+                        print(newbooks[index].id);
                         Get.toNamed('/volumes', arguments: {
                           "volumeInfo": newbooks[index],
                         });
@@ -105,20 +108,28 @@ class _NewBooksState extends State<NewBooks> {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
-                                  FutureBuilder(future: ReviewService.star(newbooks[index].id), builder: (context, snapshot) {
-                                    if (snapshot.data != null) {
-                                      double star = snapshot.data!;
-                                      print("$star, 왜 안됨?");
-                                      return Text(
-                                        "$star, 왜 안됨?"
-                                      );
-                                    } else {
-                                      return Container();
-                                    }
-                                  }),
                                 ],
                               ),
-                              
+                              FutureBuilder(
+                                future: FirebaseFirestore.instance
+                                    .collection("reviews")
+                                    .doc(newbooks[index].id)
+                                    .get()
+                                    .then((DocumentSnapshot doc) {
+                                  final data =
+                                      doc.data() as Map<String, dynamic>;
+
+                                  return data["star"];
+                                }),
+                                builder: (context, snapshot) {
+                                  if (snapshot.data != null) {
+                                    double temp = snapshot.data.toDouble();
+                                    return StarRating(temp, false, 20);
+                                  } else {
+                                    return StarRating(0.0, false, 20);
+                                  }
+                                },
+                              ),
                             ],
                           ),
                         ],
@@ -163,6 +174,45 @@ class _NewBooksState extends State<NewBooks> {
           return Container();
         }
       }),
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class StarRating extends StatefulWidget {
+  late double score;
+  late bool isSelected;
+  late double itemSize;
+
+  StarRating(this.score, this.isSelected, this.itemSize, {super.key});
+
+  @override
+  State<StarRating> createState() => _StarRatingState();
+}
+
+class _StarRatingState extends State<StarRating> {
+  @override
+  Widget build(BuildContext context) {
+    return RatingBar.builder(
+      ignoreGestures: !widget.isSelected,
+      initialRating: widget.score,
+      minRating: 1,
+      direction: Axis.horizontal,
+      allowHalfRating: true,
+      itemCount: 5,
+      itemSize: widget.itemSize,
+      itemPadding: const EdgeInsets.symmetric(horizontal: 0.0),
+      itemBuilder: (context, _) => const Icon(
+        Icons.star_rounded,
+        color: Colors.amber,
+      ),
+      onRatingUpdate: (rating) {
+        if (widget.isSelected) {
+          setState(() {
+            widget.score = rating;
+          });
+        }
+      },
     );
   }
 }

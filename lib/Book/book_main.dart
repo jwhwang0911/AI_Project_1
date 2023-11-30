@@ -1,6 +1,7 @@
 import 'package:boosic/Book/header1.dart';
 import 'package:boosic/Book/home_screen.dart';
 import 'package:boosic/Book/query.dart';
+import 'package:boosic/Get/MusicLinkController.dart';
 import 'package:boosic/Get/PageIndexController.dart';
 import 'package:boosic/Get/SearchController.dart';
 import 'package:boosic/Music/music.dart';
@@ -19,7 +20,7 @@ class _MainBookState extends State<MainBook> {
   final List<Widget> _pages = [
     const HomeScreen(),
     const Query(),
-    const MusicScreen(),
+    MusicScreen(),
   ];
 
   PageController pageController = PageController();
@@ -32,6 +33,7 @@ class _MainBookState extends State<MainBook> {
   Widget build(BuildContext context) {
     Get.put(SearchListController());
     Get.put(PageIndexController());
+    Get.put(MusicLinkController());
 
     return Scaffold(
         appBar: const PreferredSize(
@@ -60,14 +62,14 @@ class _MainBookState extends State<MainBook> {
               margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               decoration: BoxDecoration(
                 boxShadow: [
-                      BoxShadow(
-                        color: const Color.fromARGB(255, 94, 94, 94)
-                            .withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 3,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
+                  BoxShadow(
+                    color:
+                        const Color.fromARGB(255, 94, 94, 94).withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 3,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               height: 72,
               child: ClipRRect(
