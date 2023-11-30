@@ -99,7 +99,8 @@ class _LoadingState extends State<Loading> with TickerProviderStateMixin {
                 pagecontroller.setPageIndex(2);
                 pagecontroller.setQeuryCalled();
 
-                Get.toNamed("/");
+                Get.back();
+                Get.back();
               });
 
               return Center(
