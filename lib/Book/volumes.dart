@@ -1,13 +1,13 @@
 import 'package:boosic/Book/header2.dart';
 import 'package:boosic/Book/new_books.dart';
-import 'package:boosic/Service/review_service.dart';
 import 'package:boosic/models/book_model.dart';
 import 'package:boosic/models/review_model.dart';
 import 'package:boosic/utils/read_m_icons.dart';
 import 'package:boosic/utils/text_style.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide FormData, MultipartFile;
 import 'package:image_picker/image_picker.dart';
 
 class Volumes extends StatefulWidget {
@@ -59,12 +59,11 @@ class _VolumesState extends State<Volumes> {
     if (img != null) {
       setState(() {
         image = img;
-        print(image!.path);
       });
     }
   }
 
-  void openSnackbar() {
+  void openSnackbar(BookModel elem) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -97,8 +96,16 @@ class _VolumesState extends State<Volumes> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     GestureDetector(
-                      onTap: () {
-                        sendImage(true);
+                      onTap: () async {
+                        await sendImage(true);
+
+                        await Get.toNamed('loading', arguments: {
+                          "title": elem.title,
+                          "summary": elem.description,
+                          'image_file': await MultipartFile.fromFile(
+                            image!.path,
+                          )
+                        });
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -200,7 +207,7 @@ class _VolumesState extends State<Volumes> {
 
   @override
   Widget build(BuildContext context) {
-    BookModel elem = Get.arguments['volumeInfo'] as BookModel;
+    BookModel elem = Get.arguments['volumeInfo'] ?? BookModel();
 
     double imageHeight = 284;
     double imageWidth = 194;
@@ -570,7 +577,7 @@ class _VolumesState extends State<Volumes> {
               ),
               GestureDetector(
                 onTap: () {
-                  _isKeyboardOpen ? null : openSnackbar();
+                  _isKeyboardOpen ? null : openSnackbar(elem);
                 },
                 child: Container(
                   decoration: BoxDecoration(

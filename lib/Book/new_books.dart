@@ -1,5 +1,4 @@
 import 'package:boosic/Service/book_service.dart';
-import 'package:boosic/Service/review_service.dart';
 import 'package:boosic/models/book_model.dart';
 import 'package:boosic/utils/text_style.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

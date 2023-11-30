@@ -23,6 +23,7 @@ class _MusicScreenState extends State<MusicScreen>
   void initState() {
     super.initState();
     _audioPlayer = AudioPlayer();
+    _audioPlayer.stop();
 
     // Set a sequence of audio sources that will be played by the audio player.
   }
@@ -129,7 +130,6 @@ class _MusicScreenState extends State<MusicScreen>
             // ignore: body_might_complete_normally_catch_error
             .catchError((error) {
           // catch load errors: 404, invalid url ...
-          SystemNavigator.pop();
         });
 
         return Stack(alignment: Alignment.bottomCenter, children: [
@@ -146,19 +146,43 @@ class _MusicScreenState extends State<MusicScreen>
                         color:
                             index == snapshot.data ? Colors.grey : Colors.white,
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const SizedBox(
-                              width: 10,
+                            Row(
+                              children: [
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Image.asset(
+                                  'assets/images/logo.png',
+                                  height: 50,
+                                  width: 50,
+                                ),
+                                const SizedBox(
+                                  width: 30,
+                                ),
+                                Text("Music #$index",
+                                    style: TextStructure.header)
+                              ],
                             ),
-                            Image.asset(
-                              'assets/images/logo.png',
-                              height: 50,
-                              width: 50,
-                            ),
-                            const SizedBox(
-                              width: 30,
-                            ),
-                            Text("Music #$index", style: TextStructure.header)
+                            IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                controller.deleteAudioElem(index);
+                                _audioPlayer.stop();
+                                _audioPlayer = AudioPlayer();
+                                _audioPlayer
+                                    .setAudioSource(ConcatenatingAudioSource(
+                                        children:
+                                            controller.audio_list.toList()))
+                                    // ignore: body_might_complete_normally_catch_error
+                                    .catchError((error) {
+                                  // catch load errors: 404, invalid url ...
+                                  SystemNavigator.pop();
+                                });
+                                setState(() {});
+                              },
+                            )
                           ],
                         ),
                       );

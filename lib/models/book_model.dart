@@ -1,13 +1,21 @@
 // ignore_for_file: non_constant_identifier_names
 
 class BookModel {
-  final String id;
-  final List<dynamic> author;
-  final String title;
-  final String language;
+  late String id;
+  late List<dynamic> author;
+  late String title;
+  late String language;
   String image_link = "";
   bool has_image_link = false;
-  final String description;
+  late String description;
+
+  BookModel() {
+    id = "else";
+    author = [];
+    title = "";
+    language = "";
+    description = "";
+  }
 
   BookModel.fromJson(Map<String, dynamic>? json)
       : id = json!["id"],
